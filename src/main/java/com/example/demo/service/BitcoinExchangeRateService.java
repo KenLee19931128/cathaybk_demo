@@ -16,6 +16,7 @@ import com.example.demo.dto.BitcoinRate;
 import com.example.demo.dto.BitcoinRateDto;
 import com.example.demo.dto.CurrencyInfo;
 import com.example.demo.entity.DataDic;
+import com.example.demo.entity.pk.DicEntityPk;
 
 @Service
 public class BitcoinExchangeRateService {
@@ -28,10 +29,16 @@ public class BitcoinExchangeRateService {
 
 	public static final String COINDESK_URL = "https://api.coindesk.com/v1/bpi/currentprice.json";
 
+	/**
+	 * 取得 CoindeskAPI
+	 */
 	public Object getCoindeskAPI() {
 		return restTemplate.getForObject(COINDESK_URL, Object.class);
 	}
 
+	/**
+	 * 取得 CoindeskAPI將資料轉換
+	 */
 	public BitcoinRateDto getBitcoinRate() {
 		Map<String, String> currencyDic = dataDicRepository.findByType("CURRENCY").stream()
 				.collect(Collectors.toMap(DataDic::getKey, DataDic::getValue));
@@ -49,7 +56,34 @@ public class BitcoinExchangeRateService {
 		return dto;
 
 	}
+	
+	/**
+	 * 查詢幣別對應表資料
+	 */
+	public List<DataDic> findCurrencyDic() {
+		return dataDicRepository.findByType("CURRENCY");
+	}
+	
+	/**
+	 * 新增/更新幣別對應表資料
+	 */
+	public DataDic saveOrUpdateCurrencyDic(DataDic dataDic) {
+		return dataDicRepository.save(dataDic);
+	}
+	
+	/**
+	 * 刪除幣別對應表資料
+	 */
+	public void deleteCurrencyDic(String type, String key) {
+		DicEntityPk pk = new DicEntityPk();
+		pk.setKey(key);
+		pk.setType(type);
+		dataDicRepository.deleteById(pk);
+	}
 
+	/**
+	 * 日期格式轉換
+	 */
 	private String dateFormat(String dateStr) {
 		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 		DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");

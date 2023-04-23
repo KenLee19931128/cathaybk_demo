@@ -4,8 +4,10 @@ import java.util.List;
 
 public class BitcoinRateDto {
 	
+	// 更新時間
 	private String updatTime;
 	
+	// 幣別相關資訊
 	private List<CurrencyInfo> currencyInfo;
 
 	public String getUpdatTime() {

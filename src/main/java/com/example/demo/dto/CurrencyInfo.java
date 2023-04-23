@@ -2,10 +2,13 @@ package com.example.demo.dto;
 
 public class CurrencyInfo {
 	
+	// 幣別-英文
 	private String currency;
 	
+	// 幣別-中文
 	private String currencyName;
 	
+	// 匯率
 	private String rate;
 	
 	public CurrencyInfo(String currency, String currencyName, String rate) {
